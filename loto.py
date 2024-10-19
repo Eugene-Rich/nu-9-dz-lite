@@ -109,64 +109,66 @@ def qw_homo(plr, krt): # Вопросы человеку через консол
 
 # Основной блок
 
-vspb1 = Mbchnk()    # вспомогательный мешок для генерации карточки первого игрока
-vspb2 = Mbchnk()    # Вспомогательный мешок для генерации карточки второго игрока
-Mbchnk = Mbchnk()   # Основной мешок для игры
+if __name__ == '__main':
 
-print('1. Человек / компьютер')
-print('2. Человек / человек')
-print('3. Компьютер / компьютер')
-print('4. Выход')
-regr = input('Выберите режим игры : ')
+    vspb1 = Mbchnk()    # вспомогательный мешок для генерации карточки первого игрока
+    vspb2 = Mbchnk()    # Вспомогательный мешок для генерации карточки второго игрока
+    Mbchnk = Mbchnk()   # Основной мешок для игры
 
-flprod = True
-if regr == '1':
-    playr1 = Playr(False, "Человек")
-    playr2 = Playr(True, "Компьютер")
-elif regr == '2':
-    playr1 = Playr(False, "Человек 1")
-    playr2 = Playr(False, "Человек 2")
-elif regr == '3':
-    playr1 = Playr(True, "Компьютер 1")
-    playr2 = Playr(True, "Компьютер 2")
-else:
-    flprod = False
+    print('1. Человек / компьютер')
+    print('2. Человек / человек')
+    print('3. Компьютер / компьютер')
+    print('4. Выход')
+    regr = input('Выберите режим игры : ')
 
-krt1 = Kart(playr1, vspb1)
-krt2 = Kart(playr2, vspb2)
-soo = ''
+    flprod = True
+    if regr == '1':
+        playr1 = Playr(False, "Человек")
+        playr2 = Playr(True, "Компьютер")
+    elif regr == '2':
+        playr1 = Playr(False, "Человек 1")
+        playr2 = Playr(False, "Человек 2")
+    elif regr == '3':
+        playr1 = Playr(True, "Компьютер 1")
+        playr2 = Playr(True, "Компьютер 2")
+    else:
+        flprod = False
 
-while flprod:
-    psostkrt(krt1, krt2)    # Выведем состояния карточек
+    krt1 = Kart(playr1, vspb1)
+    krt2 = Kart(playr2, vspb2)
+    soo = ''
 
-    if krt1.krt_is_clouse():
-        soo = playr1.name_p + ' выиграл. Он первым закрыл все клетки в карточке.'
-        break
-    if krt2.krt_is_clouse():
-        soo = playr2.name_p + ' выиграл. Он первым закрыл все клетки в карточке.'
-        break
+    while flprod:
+        psostkrt(krt1, krt2)    # Выведем состояния карточек
 
-    tekch = Mbchnk.oshbsh() # Вытащим очередной бочонок из мешка
-
-    if regr == '1': # Человек и компьютер
-        soo = qw_homo(playr1, krt1)
-        if soo != '':
+        if krt1.krt_is_clouse():
+            soo = playr1.name_p + ' выиграл. Он первым закрыл все клетки в карточке.'
             break
-        krt2.zaccg(tekch)
-
-    elif regr == '2': # Человек и человек
-        soo = qw_homo(playr1, krt1)
-        if soo != '':
-            break
-        soo = qw_homo(playr2, krt2)
-        if soo != '':
+        if krt2.krt_is_clouse():
+            soo = playr2.name_p + ' выиграл. Он первым закрыл все клетки в карточке.'
             break
 
-    elif regr == '3': # Компьютер и компьютер
-        krt1.zaccg(tekch)
-        krt2.zaccg(tekch)
+        tekch = Mbchnk.oshbsh() # Вытащим очередной бочонок из мешка
 
-print(soo)
+        if regr == '1': # Человек и компьютер
+            soo = qw_homo(playr1, krt1)
+            if soo != '':
+                break
+            krt2.zaccg(tekch)
+
+        elif regr == '2': # Человек и человек
+            soo = qw_homo(playr1, krt1)
+            if soo != '':
+                break
+            soo = qw_homo(playr2, krt2)
+            if soo != '':
+                break
+
+        elif regr == '3': # Компьютер и компьютер
+            krt1.zaccg(tekch)
+            krt2.zaccg(tekch)
+
+    print(soo)
 
 
 

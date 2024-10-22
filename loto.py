@@ -7,10 +7,38 @@ class Playr:
         self.typ_p = typ_p
         self.name_p = name_p
 
+    def __str__(self):
+        return f'Тип игрока : {"Компьютер" if self.typ_p else "Человек"} Имя игрока : {self.name_p}'
+
+    def __eq__(self, other):
+        if self.typ_p == other.typ_p and self.name_p == other.name_p:
+            return True
+        return False
+
+    def __ne__(self, other):
+        if self.typ_p == other.typ_p and self.name_p == other.name_p:
+            return False
+        return True
+
+
 # Класс "Мешок с бочонками"
 class Mbchnk:
     def __init__(self):
         self.masb = [i for i in range(1, 91)]
+
+    def __str__(self):
+        return(f'Мешок с бочонками от 1 до 90. Вытянуты бочонки {[i+1 for i in range(0, 90) if self.masb[i] < 0]}')
+
+    def __eq__(self, other):
+        if self.masb == other.masb:
+            return True
+        return False
+
+    def __ne__(self, other):
+        if self.masb == other.masb:
+            return False
+        return True
+
 
     # Возврат очередного бочонка (числа)
     # Нужно выдавать неповторяющиеся числа (бочонки)
@@ -42,6 +70,41 @@ class Kart:
             tkart.append(skart)
         self.tkart = tkart
 
+    def __str__(self):
+        return f'Карточка {self.name_k} {"закрыта полностью" if self.krt_is_clouse() else "не закрыта"}'
+
+    def __eq__(self, other):
+        if self.name_k == other.name_k:
+            return True
+        return False
+
+    def __ne__(self, other):
+        if self.name_k == other.name_k:
+            return False
+        return True
+
+
+    # Выдать данные для печати карточки
+    def prntk(self):
+        lstvd = []
+        lstvd.append('')
+        dls = 0
+        for i in range(0, 3):
+            sttek = ''
+            for j in range(0, 9):
+                zng = self.tkart[i][j]
+                pchv = ' ' + str(abs(zng)) if abs(zng) < 10 else str(abs(zng))
+                pchz = ' ' + pchv + ' ' if zng > 0 else '-' + pchv + '-'
+                sttek = sttek + pchz + '|'
+                dls = len(sttek)
+            lstvd.append(sttek)
+
+        lstvd.append('-' * dls)
+        pervst = '- ' + self.name_k + ' ------'
+        lstvd[0] = pervst + '-' * (dls - len(pervst))
+
+        return(lstvd)
+
     # Зачеркнуть число
     # Ищем это число в карточке
     # Если оно найдено то возвращаем True
@@ -65,32 +128,13 @@ class Kart:
                     return False
         return True
 
-    # Выдать данные для печати карточки
-    def prntk(self):
-        lstvd = []
-        lstvd.append('')
-        dls = 0
-        for i in range(0, 3):
-            sttek = ''
-            for j in range(0, 9):
-                zng = self.tkart[i][j]
-                pchv = ' ' + str(abs(zng)) if abs(zng) < 10 else str(abs(zng))
-                pchz = ' ' + pchv + ' ' if zng > 0 else '-' + pchv + '-'
-                sttek = sttek + pchz + '|'
-                dls = len(sttek)
-            lstvd.append(sttek)
-
-        lstvd.append('-' * dls)
-        pervst = '- ' + self.name_k + ' ------'
-        lstvd[0] = pervst + '-' * (dls - len(pervst))
-
-        return(lstvd)
 
 def psostkrt(igrok1, igrok2): # Печать состояния карточек
     k1 = igrok1.prntk()
     k2 = igrok2.prntk()
     for i in range(0, 5):
         print(k1[i] + '    ' + k2[i])
+    print(str(igrok1) + ' ' * 22 + str(igrok2))
 
 def qw_homo(plr, krt): # Вопросы человеку через консоль и обработка ответов
 
@@ -109,7 +153,7 @@ def qw_homo(plr, krt): # Вопросы человеку через консол
 
 # Основной блок
 
-if __name__ == '__main':
+if __name__ == '__main__':
 
     vspb1 = Mbchnk()    # вспомогательный мешок для генерации карточки первого игрока
     vspb2 = Mbchnk()    # Вспомогательный мешок для генерации карточки второго игрока
@@ -134,6 +178,12 @@ if __name__ == '__main':
     else:
         flprod = False
 
+    print('Выбраны игроки и бочонок-----------')
+    print(playr1)
+    print(playr2)
+    print(Mbchnk)
+    print('-----------------------------------')
+
     krt1 = Kart(playr1, vspb1)
     krt2 = Kart(playr2, vspb2)
     soo = ''
@@ -149,6 +199,7 @@ if __name__ == '__main':
             break
 
         tekch = Mbchnk.oshbsh() # Вытащим очередной бочонок из мешка
+        print(Mbchnk)
 
         if regr == '1': # Человек и компьютер
             soo = qw_homo(playr1, krt1)
